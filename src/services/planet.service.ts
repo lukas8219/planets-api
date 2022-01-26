@@ -24,4 +24,15 @@ export class PlanetService {
         return result;
     }
 
+    async getByName(name :string): Promise<Planet> {
+        const result = await this.repository.findByName(name);
+
+        console.log(result);
+
+        if(!result){
+            throw new NotFoundException();
+        }
+
+        return result;
+    }
 }

@@ -8,6 +8,8 @@ export interface PlanetRepository {
 
     save(planet: Planet): Promise<Planet>
 
+    findByName(name : string): Promise<Planet>
+
     findAll(): Promise<Planet[]>
 
 }
