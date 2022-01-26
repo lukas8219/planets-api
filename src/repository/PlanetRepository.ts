@@ -6,11 +6,17 @@ export interface PlanetRepository {
 
     findById(id: number): Promise<Planet>
 
-    save(planet: Planet): Promise<Planet>
-
     findByName(name : string): Promise<Planet>
 
     findAll(): Promise<Planet[]>
+
+    save(planet: Planet): Promise<Planet>
+
+    deleteById(id : number): Promise<void>
+    
+
+    getAllPaginated(filters) : Promise<Array<Planet>>
+
 
 }
 

@@ -1,3 +1,5 @@
+import { timeStamp } from "console";
+
 export class Planet {
 
     private id: number;
@@ -20,6 +22,10 @@ export class Planet {
 
     setTerrain(terrain: string){
         this.terrain = terrain;
+    }
+
+    getId(){
+        return this.id;
     }
 
     setId(id: number){
