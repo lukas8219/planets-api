@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { PaginationParameters } from "src/data/domain/pagination.parameters";
 import { Planet } from "src/data/domain/planet.entity";
 import { PlanetRepository } from "./PlanetRepository";
 
@@ -7,9 +8,12 @@ export class PlanetRepositoryImpl implements PlanetRepository {
 
     constructor(){}
 
-    getAllPaginated(filters: any): Promise<Planet[]> {
+    getAllPaginated(filters: PaginationParameters): Promise<Planet[]> {
         const values = Object.values(this.cache);
-        return Promise.resolve(values.slice(0, values.length));
+        console.log(filters);
+        const initial = filters.getPageNumber() * filters.getPageSize();
+        const final = initial + filters.getPageSize();
+        return Promise.resolve(values.slice(initial, initial + filters.getPageSize()));
     }
 
     private cache: { [key: number]: Planet} = {};
@@ -57,10 +61,6 @@ export class PlanetRepositoryImpl implements PlanetRepository {
         planet.setId(id);
         this.cache[id] = planet;
         return planet;
-    }
-
-    async findAll(): Promise<Planet[]> {
-        throw new Error("Not implemented");
     }
 
 }

@@ -1,4 +1,5 @@
 import { NotFoundException } from "@nestjs/common";
+import { PaginationParameters } from "src/data/domain/pagination.parameters";
 import { Planet } from "src/data/domain/planet.entity"
 import { PaginationDTO } from "src/data/dto/pagination.dto";
 import { PlanetCreateDTO } from "src/data/dto/planet.create.dto";
@@ -41,7 +42,7 @@ export class PlanetService {
     }
 
     async getPaginated(filters): Promise<PaginationDTO<PlanetListDTO>>{
-        const results = await this.repository.getAllPaginated(filters)
+        const results = await this.repository.getAllPaginated(new PaginationParameters(filters))
             .then((array) => array.map((planet) => new PlanetListDTO({
                 id: planet.getId(),
                 name: planet.getName()

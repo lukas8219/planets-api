@@ -4,8 +4,8 @@ import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 export class PaginationConfig implements OnApplicationBootstrap {
 
     onApplicationBootstrap() {
-        if(!this.pageNumber || !this.pageSize || !this.sort){
-            throw new Error();
+        if(!this.pageNumber === undefined || !this.pageSize || !this.sort){
+            throw new Error("Lacking Environment variables for Pagination!");
         }
     }
 

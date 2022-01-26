@@ -1,5 +1,3 @@
-import { Planet } from "../domain/planet.entity";
-
 export class PlanetListDTO {
 
     private id : number;

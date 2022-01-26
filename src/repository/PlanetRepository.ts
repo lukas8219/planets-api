@@ -1,4 +1,5 @@
 import { Inject } from "@nestjs/common";
+import { PaginationParameters } from "src/data/domain/pagination.parameters";
 import { Planet } from "src/data/domain/planet.entity";
 import { PlanetRepositoryImpl } from "./PlanetRepositoryImp";
 
@@ -8,14 +9,12 @@ export interface PlanetRepository {
 
     findByName(name : string): Promise<Planet>
 
-    findAll(): Promise<Planet[]>
-
     save(planet: Planet): Promise<Planet>
 
     deleteById(id : number): Promise<void>
     
 
-    getAllPaginated(filters) : Promise<Array<Planet>>
+    getAllPaginated(filters : PaginationParameters) : Promise<Array<Planet>>
 
 
 }

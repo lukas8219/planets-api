@@ -1,5 +1,3 @@
-import { timeStamp } from "console";
-
 export class Planet {
 
     private id: number;
