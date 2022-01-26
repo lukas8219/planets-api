@@ -1,4 +1,6 @@
 import {Body, Controller, Delete, Get, HttpCode, Param, Post, Query } from "@nestjs/common";
+import { timeStamp } from "console";
+import { PaginationConfig } from "src/config/PaginationConfig";
 import { Planet } from "src/data/domain/planet.entity";
 import { PaginationDTO } from "src/data/dto/pagination.dto";
 import { PlanetCreateDTO } from "src/data/dto/planet.create.dto";
@@ -8,7 +10,7 @@ import { PlanetService } from "src/services/planet.service";
 @Controller('/v1/planets')
 export class PlanetsApi {
 
-    constructor(private readonly planetsService: PlanetService){}
+    constructor(private readonly planetsService: PlanetService, private readonly config: PaginationConfig){}
 
     @Get(':query')
     async getById(@Param('query') query : Number | String) : Promise<Planet>{
@@ -33,9 +35,9 @@ export class PlanetsApi {
     }
 
     @Get()
-    async search(@Query('pageNumber') pageNumber : Number = 0,
-                 @Query('pageSize') pageSize: number = 5,
-                 @Query('sort') sort : string = 'id'): Promise<PaginationDTO<PlanetListDTO>> {
+    async search(@Query('pageNumber') pageNumber : Number = this.config.getPageNumber(),
+                 @Query('pageSize') pageSize: Number = this.config.getPageSize(),
+                 @Query('sort') sort : string = this.config.getSort()): Promise<PaginationDTO<PlanetListDTO>> {
         return await this.planetsService.getPaginated({
             pageNumber: Number(pageNumber),
             pageSize: Number(pageSize),

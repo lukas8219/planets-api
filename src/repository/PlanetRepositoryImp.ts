@@ -5,6 +5,8 @@ import { PlanetRepository } from "./PlanetRepository";
 @Injectable()
 export class PlanetRepositoryImpl implements PlanetRepository {
 
+    constructor(){}
+
     getAllPaginated(filters: any): Promise<Planet[]> {
         const values = Object.values(this.cache);
         return Promise.resolve(values.slice(0, values.length));
