@@ -114,7 +114,7 @@ export class PlanetRepositoryImpl implements PlanetRepository {
             return new Planet({...result});
         } catch(err){
             if(err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002'){
-                throw new UnprocessableEntityException("Já existe um planeta com este nome")
+                throw new UnprocessableEntityException("There's already a planet with this name")
             }
             throw err;
         }
