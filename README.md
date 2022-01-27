@@ -11,4 +11,6 @@ Next POC's with NestJS
 
 - [ ] File Upload
 
+- [ ] Create Entities Relationships and Try JOIN's with Prisma
+
 ## Need to add further endpoint documentation
