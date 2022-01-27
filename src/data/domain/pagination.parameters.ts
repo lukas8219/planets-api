@@ -22,7 +22,7 @@ export class PaginationParameters {
         return this.pageNumber;
     }
 
-    getSort(){
+    getSort() : string{
         return this.sort;;
     }
 

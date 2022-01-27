@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
-import e from "express";
 import { PaginationParameters } from "src/data/domain/pagination.parameters";
 import { Planet } from "src/data/domain/planet.entity";
 import { Database } from "./Database";
@@ -16,14 +15,27 @@ export class PlanetRepositoryImpl implements PlanetRepository {
     }
 
     getAllPaginated(filters: PaginationParameters): Promise<Planet[]> {
-        const values = Object.values(this.cache);
-        console.log(filters);
-        const initial = filters.getPageNumber() * filters.getPageSize();
-        const final = initial + filters.getPageSize();
-        return Promise.resolve(values.slice(initial, initial + filters.getPageSize()));
+        return this.getPaginated(filters);
     }
 
-    private cache: { [key: number]: Planet} = {};
+    async getPaginated(filters : PaginationParameters) : Promise<Planet[]>{
+        const initial = filters.getPageNumber() * filters.getPageSize();
+        var orderBy = {};
+        orderBy[filters.getSort()] = 'asc';
+
+        const result = await this.db.findMany({
+            orderBy: orderBy,
+            skip: initial,
+            take: filters.getPageSize(),
+            select: {
+                id: true,
+                name: true
+            }
+        });
+
+        return result.map((item) => new Planet({...item}));
+
+    }
 
     async deleteById(id: number): Promise<void> {
         try{
