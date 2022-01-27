@@ -1,10 +1,14 @@
 export class Planet {
 
-    private id: number;
+    private id: Number;
 
     private name: string;
 
     private terrain: string;
+
+    constructor(planet : any){
+        Object.assign(this,planet);
+    }
 
     getName(){
         return this.name;
@@ -22,7 +26,7 @@ export class Planet {
         this.terrain = terrain;
     }
 
-    getId(){
+    getId() : Number{
         return this.id;
     }
 

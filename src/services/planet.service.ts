@@ -11,9 +11,9 @@ export class PlanetService {
     constructor(@InjectPlanetRepository private readonly  repository:PlanetRepository){}
 
     async create(planet: PlanetCreateDTO): Promise<Planet> {
-        const result = new Planet();
-        result.setName(planet.name);
-        result.setTerrain(planet.terrain);
+        const result = new Planet({
+            ...planet
+        });
         return this.repository.save(result);
     }
 

@@ -1,12 +1,19 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import e from "express";
 import { PaginationParameters } from "src/data/domain/pagination.parameters";
 import { Planet } from "src/data/domain/planet.entity";
+import { Database } from "./Database";
 import { PlanetRepository } from "./PlanetRepository";
 
 @Injectable()
 export class PlanetRepositoryImpl implements PlanetRepository {
 
-    constructor(){}
+    private db;
+
+    constructor(database : Database){
+        this.db = database.getPlanetDatabase();
+    }
 
     getAllPaginated(filters: PaginationParameters): Promise<Planet[]> {
         const values = Object.values(this.cache);
@@ -19,48 +26,86 @@ export class PlanetRepositoryImpl implements PlanetRepository {
     private cache: { [key: number]: Planet} = {};
 
     async deleteById(id: number): Promise<void> {
-        const planet = this.cache[id];
-
-        if(planet){
-            delete this.cache[id];
-        } else {
+        try{
+            await this.db.delete({
+                where: {
+                    id: Number(id)
+                }
+            })
+            return Promise.resolve();
+        } catch (err){
             throw new NotFoundException();
-
         }
-
-        return Promise.resolve();
     }
 
-    findByName(name: string): Promise<Planet> {
-        const values = Object.values(this.cache);
+    async findByName(name: string): Promise<Planet> {
+    
+        const result = await this.db
+            .findUnique({
+                where: {
+                    name: name
+                },
+                select:{
+                    id: true,
+                    name: true,
+                    terrain: true
+                }
+            });
 
-        console.log(values);
+        if(!result){
+            return undefined;
+        }
 
-        console.log(name);
-
-
-
-        const planets = values.filter((planet: Planet) => { 
-
-            console.log(planet.getName());
-
-            return planet.getName().toLowerCase() == name.toLowerCase()
-        });
-
-        console.log(planets);
-
-        return Promise.resolve(planets[0]);
+        return new Planet({...result});
     }
 
     async findById(id: number): Promise<Planet> {
-        return this.cache[id];
+        const result = await this.db.findUnique({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                name: true,
+                terrain: true
+            }
+        });
+
+        if(!result){
+            return undefined;
+        }
+
+        return new Planet({...result});
     }
 
     async save(planet: Planet): Promise<Planet> {
-        const id = Math.floor(Math.random() * 500);
-        planet.setId(id);
-        this.cache[id] = planet;
-        return planet;
+        try {
+            let result;
+            if(planet.getId() === undefined){
+                    result = await this.db.create({
+                        data:{
+                            name: planet.getName(),
+                            terrain: planet.getTerrain()
+                        }
+                    })
+            } else {
+                result = await this.db.update({
+                    where: {
+                        id: planet.getId() as number
+                    },
+                    data:{
+                        name: planet.getName(),
+                        terrain: planet.getTerrain()
+                    }
+                })
+            }
+            return new Planet({...result});
+        } catch(err){
+            if(err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002'){
+                throw new UnprocessableEntityException("Já existe um planeta com este nome")
+            }
+            throw err;
+        }
     }
 
 }

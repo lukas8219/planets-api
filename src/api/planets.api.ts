@@ -1,5 +1,4 @@
 import {Body, Controller, Delete, Get, HttpCode, Param, Post, Query } from "@nestjs/common";
-import { timeStamp } from "console";
 import { PaginationConfig } from "src/config/PaginationConfig";
 import { Planet } from "src/data/domain/planet.entity";
 import { PaginationDTO } from "src/data/dto/pagination.dto";
@@ -30,6 +29,7 @@ export class PlanetsApi {
     }
 
     @Delete(':id')
+    @HttpCode(204)
     async delete(@Param('id') id: number): Promise<void>{
         return await this.planetsService.delete(id);
     }

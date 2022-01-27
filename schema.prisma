@@ -1,0 +1,15 @@
+datasource db {
+  provider = "mysql"
+  url      = "mysql://lucas:12345678@localhost:3306/planets?"
+}
+
+// Generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Planet {
+  id    Int     @id @default(autoincrement())
+  name String @unique
+  terrain String
+}
