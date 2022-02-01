@@ -19,7 +19,6 @@ export class PlanetService {
 
     async getById(id: number): Promise<Planet> {
         const result = await this.repository.findById(id);
-
         if(!result){
             throw new NotFoundException();
         }
@@ -28,6 +27,7 @@ export class PlanetService {
     }
 
     async getByName(name :string): Promise<Planet> {
+        console.log('!!!!');
         const result = await this.repository.findByName(name);
 
         if(!result){
