@@ -1,37 +1,37 @@
 export class Planet {
 
-    private id: Number;
+    private _id: number;
 
-    private name: string;
+    private _name: string;
 
-    private terrain: string;
+    private _terrain: string;
 
     constructor(planet : any){
         Object.assign(this,planet);
     }
 
-    getName(){
-        return this.name;
+    public get name(){
+        return this._name;
     }
 
-    getTerrain(){
-        return this.terrain;
+    public get terrain(){
+        return this._terrain;
     }
 
-    setName(name: string){
-        this.name = name;
+    public set name(name: string){
+        this._name = name;
     }
 
-    setTerrain(terrain: string){
-        this.terrain = terrain;
+    public set terrain(terrain: string){
+        this._terrain = terrain;
     }
 
-    getId() : Number{
-        return this.id;
+    public get id() : number{
+        return this._id;
     }
 
-    setId(id: number){
-        this.id = id;
+    public set id(id: number){
+        this._id = id;
     }
 
 }

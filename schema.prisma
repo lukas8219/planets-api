@@ -9,7 +9,20 @@ generator client {
 }
 
 model Planet {
+  
   id    Int     @id @default(autoincrement())
   name String @unique
   terrain String
+  movies Movies[]
+
+}
+
+model Movies {
+
+  id Int @id @default(autoincrement())
+  planetId Int
+  planet Planet? @relation(fields: [planetId], references: [id])
+  name String
+  
+  @@index([id], name:"movies_id")
 }

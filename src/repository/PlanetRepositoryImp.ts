@@ -93,21 +93,31 @@ export class PlanetRepositoryImpl implements PlanetRepository {
     async save(planet: Planet): Promise<Planet> {
         try {
             let result;
-            if(planet.getId() === undefined){
+            if(planet.id === undefined){
                     result = await this.db.create({
                         data:{
-                            name: planet.getName(),
-                            terrain: planet.getTerrain()
+                            name: planet.name,
+                            terrain: planet.terrain,
+                            movies:{
+                                create:[
+                                    {
+                                        name: 'Nome 1'
+                                    },
+                                    {
+                                        name: 'Nome 2'
+                                    }
+                                ]
+                            }
                         }
                     })
             } else {
                 result = await this.db.update({
                     where: {
-                        id: planet.getId() as number
+                        id: planet.id as number
                     },
                     data:{
-                        name: planet.getName(),
-                        terrain: planet.getTerrain()
+                        name: planet.name,
+                        terrain: planet.name
                     }
                 })
             }

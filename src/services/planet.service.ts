@@ -11,10 +11,7 @@ export class PlanetService {
     constructor(@InjectPlanetRepository private readonly  repository:PlanetRepository){}
 
     async create(planet: PlanetCreateDTO): Promise<Planet> {
-        const result = new Planet({
-            ...planet
-        });
-        return this.repository.save(result);
+        return this.repository.save(new Planet({...planet}));
     }
 
     async getById(id: number): Promise<Planet> {
@@ -44,8 +41,8 @@ export class PlanetService {
     async getPaginated(filters): Promise<PaginationDTO<PlanetListDTO>>{
         const results = await this.repository.getAllPaginated(new PaginationParameters(filters))
             .then((array) => array.map((planet) => new PlanetListDTO({
-                id: planet.getId(),
-                name: planet.getName()
+                id: planet.id,
+                name: planet.name
             })));
 
         return new PaginationDTO({
